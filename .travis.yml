@@ -1,5 +1,4 @@
 sudo: required
-
 services:
   - docker
 
@@ -10,15 +9,11 @@ script:
   - docker run -e CI=true pauloes/react-test npm test -- --coverage
 
 after_success:
-  # Build images
   - docker build -t pauloes/multi-client ./client
   - docker build -t pauloes/multi-nginx ./nginx
   - docker build -t pauloes/multi-server ./server
   - docker build -t pauloes/multi-worker ./worker
-  # Log in to the docker CLI
-  # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD" --password-stdin
-  - echo "$DOCKER_PASSWORD" | docker login --password-stdin --username "DOCKER_ID"
-  # Take those images and push them to docker hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_USER" --password-stdin
   - docker push pauloes/multi-client
   - docker push pauloes/multi-nginx
   - docker push pauloes/multi-server
