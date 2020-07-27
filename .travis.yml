@@ -16,9 +16,10 @@ after_success:
   - docker build -t pauloes/multi-nginx ./nginx
   - docker build -t pauloes/multi-server ./server
   - docker build -t pauloes/multi-worker ./worker
-
-deploy:
-  provider: script
-  script: bash docker_push
-  on:
-    branch: master
+  # Log in to the docker CLI
+  - docker login -u "$DOCKER_PASSWORD" -p "$DOCKER_ID" docker.io
+  # Take those images and push them to docker hub
+  - docker push pauloes/multi-client
+  - docker push pauloes/multi-nginx
+  - docker push pauloes/multi-server
+  - docker push pauloes/multi-worker
